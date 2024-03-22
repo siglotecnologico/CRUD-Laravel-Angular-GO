@@ -1,0 +1,29 @@
+  
+  <!-- CONTENT -->
+  <content></content>
+  <!--/ CONTENT -->
+ 
+<!--/ APP-CONTENT -->
+
+<!-- FOOTER -->
+<ng-container *ngTemplateOutlet="footer"></ng-container>
+<!--/ FOOTER -->
+ 
+
+<!-- FOOTER -->
+<ng-template #footer>
+  <footer
+    *ngIf="!coreConfig.layout.footer.hidden"
+    class="footer"
+    [ngClass]="
+      coreConfig.layout.footer.customBackgroundColor === true
+        ? coreConfig.layout.footer.background +
+          ' ' +
+          coreConfig.layout.footer.type +
+          ' ' +
+          coreConfig.layout.footer.backgroundColor
+        : coreConfig.layout.footer.background + ' ' + coreConfig.layout.footer.type
+    "
+  ></footer>
+</ng-template>
+<!-- / FOOTER -->

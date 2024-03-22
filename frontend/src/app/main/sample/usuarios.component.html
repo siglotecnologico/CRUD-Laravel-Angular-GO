@@ -1,0 +1,258 @@
+<div class="content-body">
+  <section>
+    <div class="row">
+      <div class="col-12">
+        <div class="card" style="background-color: rgba(244, 243, 250, 0.411);">
+          <div class="card-header">
+            <div class="navbar-container d-flex">
+              <div class="bookmark-wrapper d-flex">
+                <li class="nav-item d-none d-lg-block">
+                  <p>Modulo de Administración </p>
+                  <h3>Administración de Usuarios</h3>
+                </li>
+              </div>
+            </div>
+
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-3 mb-3">
+                <div class="form-group">
+                  <select [(ngModel)]="selectedDepartment" (ngModelChange)="applyFilters()" class="form-control"
+                    id="basicSelect">
+                    <option value="" disabled>Seleccione un departamento</option>
+                    <option *ngFor="let departamento of departamentosFiltros" [value]="departamento.departamento">{{
+                      departamento.departamento }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <div class="form-group">
+                  <select [(ngModel)]="selectedCargo" (ngModelChange)="applyFilters()" class="form-control"
+                    id="basicSelect">
+                    <option value="" disabled>Seleccione un Cargo</option>
+                    <option *ngFor="let cargo of cargosFiltros" [value]="cargo.cargos">{{ cargo.cargos }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3"> <a href="javascript:void(0);" class="action-link filtro-link"
+                  (click)="clearFiltro()"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-wash-dryclean-off">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M20.048 16.033a9 9 0 0 0 -12.094 -12.075m-2.321 1.682a9 9 0 0 0 12.733 12.723" />
+                    <path d="M3 3l18 18" />
+                  </svg></a></div>
+              <div class="col-md-3 mb-3  d-flex justify-content-end">
+                <button type="button" class="btn btn-outline-dark" (click)="modalOpenAD(modalBD)" rippleEffect>Crear
+                  nuevo usuario</button>
+              </div>
+            </div>
+            <div class="content-body">
+              <section>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="external-card"
+                      style="background-color: white; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+                      <!-- Este es el card externo con el fondo blanco y un ligero borde -->
+                      <div class="card">
+                        <div class="card-header">
+                          <!-- Contenido de la cabecera del card -->
+                        </div>
+                        <div class="card-body">
+                          <div class="table-responsive text-nowrap">
+                            <table class="table table-hover" style="border: 2px solid #ccc;">
+
+                              <thead>
+                                <tr>
+                                  <th>Usuario</th>
+                                  <th>Nombres</th>
+                                  <th>Departamento</th>
+                                  <th>Cargo</th>
+                                  <th>Estado</th>
+                                  <th>Email</th>
+                                  <th colspan="2" style="text-align: center;">Acciones</th>
+                                </tr>
+
+                              </thead>
+
+                              <tbody class="table-border-bottom-0">
+
+                                <tr *ngFor="let user of filteredUsers">
+                                  <td class="font-weight-bold">{{ user.usuario }}</td>
+                                  <td>{{ user.primernombre }} {{ user.primerapellido }}</td>
+                                  <!-- {{ user.segundonombre }} --> <!-- {{ user.segundoapellido }} -->
+                                  <td><span class="badge badge-pill badge-light-primary mr-1">{{ user.departamento
+                                      }}</span></td>
+                                  <td>{{ user.cargo }}</td>
+                                  <td class="estado-cell" [ngClass]="{'activo': user.status, 'inactivo': !user.status}">
+                                    <span *ngIf="user.status" class="badge badge-pill text-success">Activo </span>
+                                    <span *ngIf="!user.status" class="badge badge-pill text-danger">Inactivo </span>
+                                  </td>
+                                  <td>{{ user.email }}</td>
+                                  <td>
+                                    <a href="javascript:void(0);" class="action-link edit-link"
+                                      (click)="openEditModal(user,modalBD)">
+
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+                                        <path
+                                          d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                        <path d="M16 5l3 3" />
+                                      </svg>
+                                      <span>Editar</span>
+                                    </a>
+                                  </td>
+                                  <td>
+                                    <a href="javascript:void(0);" class="action-link delete-link"
+                                      (click)="deleteUser(user)">
+
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M4 7l16 0" />
+                                        <path d="M10 11l0 6" />
+                                        <path d="M14 11l0 6" />
+                                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                      </svg>
+                                      <span>Delete</span>
+                                    </a>
+                                  </td>
+                                </tr>
+                                <tr style="background-color: #706f6f;">
+                                  <td colspan="7">
+                                    <div class="card-body">
+                                      <div class="row">
+                                        <div class="col-sm-12">
+                                          <h5><strong>Total Registros: {{ totalItems }} / {{totalUsers}}</strong></h5>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                              <div *ngIf="filteredUsers.length === 0">
+                                <ngb-alert [type]="'dark'" [dismissible]="false">
+                                  <h4 class="alert-heading">No se encontraron resultados, para esta busqueda.</h4>
+                                  <div class="alert-body">
+                                    Intente con otra conbinación de filtros.
+                                  </div>
+                                </ngb-alert>
+                              </div>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="pagination">
+                  <button class="btn btn-primary" (click)="changePage(1)" [disabled]="page === 1">Primera</button>
+                  <button class="btn btn-primary" (click)="changePage(page - 1)"
+                    [disabled]="page === 1">Anterior</button>
+                  <button *ngFor="let p of totalPages" class="btn btn-outline-primary" (click)="changePage(p)"
+                    [class.active]="p === page">{{ p }}</button>
+                  <button class="btn btn-primary" (click)="changePage(page + 1)"
+                    [disabled]="page === totalPages.length">Siguiente</button>
+                  <button class="btn btn-primary" (click)="changePage(totalPages.length)"
+                    [disabled]="page === totalPages.length">Última</button>
+
+                </div>
+              </section>
+            </div>
+
+            <ng-template #modalBD let-modal>
+              <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel4">{{ isCreatingUser ? 'Registar Usuario' : 'Actualizar Usuario'
+                  }}</h4>
+                <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" tabindex="0" ngbAutofocus>
+                <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+                  {{ errorMessage }}
+                </div>
+                <form [formGroup]="userForm" (ngSubmit)="isCreatingUser ? createUser() : updateUser()">
+                  <div class="container-fluid">
+                    <div class="row">
+                      <div class="col">
+                        <div class="mb-6 mb-1">
+                          <label for="departamento" class="form-label"><strong>Departamento</strong></label>
+                          <select id="departamento" formControlName="departamento" class="form-control">
+                            <option [ngValue]="null" disabled selected>Seleccione un Departamento</option>
+                            <option *ngFor="let departamento of departamentos" [ngValue]="departamento">{{ departamento
+                              }}</option>
+                          </select>
+
+                        </div>
+                        <div class="mb-6 mb-1">
+                          <label for="usuario" class="form-label"><strong>Usuario</strong></label>
+                          <input type="text" id="usuario" formControlName="usuario" class="form-control"
+                            placeholder="Usuario">
+                        </div>
+                        <div class="mb-6 mb-1">
+                          <label for="primernombre" class="form-label"><strong>Primer Nombre</strong></label>
+                          <input type="text" id="primernombre" formControlName="primernombre" class="form-control"
+                            placeholder="Primer Nombre">
+                        </div>
+                        <div class="mb-6 mb-1">
+                          <label for="primerapellido" class="form-label"><strong>Primer Apellido</strong></label>
+                          <input type="text" id="primerapellido" formControlName="primerapellido" class="form-control"
+                            placeholder="Primer Apellido">
+                        </div>
+
+                      </div>
+                      <div class="col">
+                        <div class="mb-6 mb-1">
+                          <label for="cargo" class="form-label"><strong>Cargo</strong></label>
+                          <select id="cargo" formControlName="cargo" class="form-control">
+                            <option [ngValue]="null" disabled selected>Seleccione un Cargo</option>
+                            <option *ngFor="let cargo of cargos" [value]="cargo">{{ cargo }}</option>
+                          </select>
+                        </div>
+
+                        <div class="mb-6 mb-1">
+                          <label for="email" class="form-label"><strong>Email</strong></label>
+                          <input type="email" id="email" formControlName="email" class="form-control"
+                            placeholder="Email">
+                        </div>
+                        <div class="mb-6 mb-1">
+                          <label for="segundonombre" class="form-label"><strong>Segundo Nombre</strong></label>
+                          <input type="text" id="segundonombre" formControlName="segundonombre"
+                            class="form-control rounded-end" placeholder="Segundo Nombre">
+                        </div>
+                        <div class="mb-6 mb-1">
+                          <label for="segundoapellido" class="form-label"><strong>Segundo Apellido</strong></label>
+                          <input type="text" id="segundoapellido" formControlName="segundoapellido" class="form-control"
+                            placeholder="Segundo Apellido">
+                        </div>
+                        <div class="mb-6 mb-1">
+                          <label for="status" class="form-label"><strong>Estado</strong></label>
+                          <select id="status" formControlName="status" class="form-control">
+                            <option [ngValue]="null" disabled selected>Seleccione un Estado</option>
+                            <option value="true">Activo</option>
+                            <option value="false">Inactivo</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" [disabled]="!userForm.valid"
+                  (click)="isCreatingUser ? createUser() : updateUser()">
+                  {{ isCreatingUser ? 'Registrar' : 'Actualizar' }}
+                </button>
+                <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
+              </div>
+            </ng-template>
